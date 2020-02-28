@@ -1,0 +1,21 @@
+def solution(s):
+    braille_list =[]
+    dictionary = {}
+    results =""
+    sentence = "the quick brown fox jumps over the lazy dog"
+    braille_dots ="011110110010100010000000111110101001010100100100101000000000110000111010101010010111101110000000110100101010101101000000010110101001101100111100011100000000101010111001100010111010000000011110110010100010000000111000100000101011101111000000100110101010110110"
+    for i in range(0,len(sentence)):
+        str =""
+        for j in range(6):
+            str += braille_dots[j+(i*6)]
+        braille_list.append(str)
+    for i in range(len(sentence)):
+        dictionary[sentence[i]] = braille_list[i]
+    for char in s:
+        if char.isupper():
+            results += "000001"
+        char = char.lower()
+        results += dictionary[char]
+    return results
+            
+print(solution("code"))

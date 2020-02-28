@@ -1,0 +1,70 @@
+def solution(pegs):
+    
+    # since we want to double the speed, r1 / rn = 2 so 2*rn = r1 where r1 is the ratio of the first gear and rn is the ratio of the last gear
+    # The general recursive formula for the ratio of the nth gear is rn = pn - p(n-1) - r(n-1) where pn and p(n-1) is the location of the nth peg and n-1th peg respectively
+    
+    fraction = [] # the list containing the nominator and denominator
+    
+    # calculating the ratio of the last gear based on the recursive formula
+    calculated = len(pegs)-2
+    sums = pegs[len(pegs)-1]
+    if len(pegs) % 2 ==0:
+        while calculated > 0:
+            sums +=2*(pegs[calculated]) *((-1)**(calculated+1))
+            calculated -= 1        
+    else:
+        while calculated > 0:
+            sums +=2*(pegs[calculated]) *((-1)**(calculated))
+            calculated -= 1
+    
+    # calculating r1 based on rn so that r1 / rn = 2
+    if (len(pegs))%2==0:
+        sums = sums-pegs[0]
+        r = sums *(2.0/3)      
+    else:
+        sums = sums+pegs[0]
+        r = sums*-2       
+    
+    # calculating the ratio of all gears based on r1 and putting them in a list
+    list_of_ratios = []
+    list_of_ratios.append(r)
+    gear_num = 0
+    while gear_num < len(pegs)-1:
+        list_of_ratios.append(pegs[gear_num+1] - pegs[gear_num] - list_of_ratios[gear_num])
+        gear_num +=1
+    
+    # validating the ratio of all gears (except the last one). All of them should be no less than one and should not exceed the next peg.
+    problem = False
+    for i in range(len(pegs)-1):
+        if not (list_of_ratios[i] >= 1 and list_of_ratios[i] < (pegs[i+1] - pegs[i])):
+            problem = True
+            
+    if list_of_ratios[len(list_of_ratios)-1] < 1: # validating the last gear ratio
+        problem = True 
+        
+    # if all ratios are valid, create the simplest fraction to show the value of r1
+    if not problem: 
+        
+        # checking if the number of gears is odd or even
+        if (len(pegs))%2==0:
+            
+            # for even number of gears, the denominator is either 1 or 3
+            if sums % 3 ==0:
+                fraction.append(sums *2/3)
+                fraction.append(1)
+            else:
+                fraction.append(sums *2)
+                fraction.append(3) 
+                
+        else:   # for odd number of gears, the ratio is always an integer so the denominator is 1
+            fraction.append(-2*sums)
+            fraction.append(1)    
+            
+    else:   # if any of the ratios are invalid, show -1, -1
+        fraction.append(-1)
+        fraction.append(-1)
+    
+    return fraction
+        
+            
+print(solution([4,30,50]))

@@ -1,0 +1,71 @@
+def solution(map):
+    
+    paths_length = [] # keeping the lengths of all paths possible
+    
+    # use BFS to find the shortest path in the maze
+    # repeat for different cases, with a 1 removed in each case
+    for x in range(len(map)):
+        for y in range(len(map[0])):
+            if map[x][y] == 1 or (x == 0 and y == 0):  # run BFS if and only if it is the default maze or a 1 is seen 
+                
+                map[x][y] = 0
+                queue = []
+                current = ""
+                final = str(len(map)-1) + str(len(map[0])-1) # the exit
+                row_direction = [-1, 0, 0, 1] 
+                col_direction = [0, -1, 1, 0]
+                visited = []    # keeps track of the visited points
+                temp = []
+                distances = []  # holds the distance of each point from the starting point
+                queue.append("0 0") # put the starting point in queue
+                
+                # creating a 2D list with the same dimensions of the map to keep track of visited points
+                for i in range(len(map)):
+                    for j in range (len(map[0])):
+                        temp.append(False)
+                    visited.append(temp)
+                    temp = []
+                visited[0][0] = True
+                
+                # creating a 2D list with the same dimensions of the map to keep track of the distances
+                for i in range(len(map)):
+                    for j in range (len(map[0])):
+                        temp.append(0)
+                    distances.append(temp)
+                    temp = []
+                    
+                # run BFS
+                while len(queue) > 0: 
+
+                    current = queue[len(queue)-1]
+                    if current == final: 
+                        break
+                    current = current.split()
+                    queue.pop()
+                    
+                    # look in the four directions for possible paths to explore
+                    for i in range(4):
+                        
+                        row = int(current[0]) + row_direction[i]
+                        col = int(current[1]) + col_direction[i]
+                        if (row > -1 and row < len(map)) and (col > -1 and col < len(map[0]))  and map[row][col] == 0 and (not visited[row][col]):
+                            distances[row][col] = 1 + distances[int(current[0])][int(current[1])]
+                            visited[row][col] = True
+                            queue.append((str(row)+" "+str(col)))
+                paths_length.append(distances[len(map)-1][len(map[0])-1])
+                
+                # if the maze is not the original one, revert the change
+                if not (x==0 and y ==0):
+                    map[x][y] = 1
+    
+    paths_length.sort() # sorting the list of path lengths to find the smallest non zero length
+    
+    # picking the next smallest length if the smallest one is 0
+    # 0 means the maze is unsolvable at first, but it becomes solvable after you remove a 1
+    smallest_index = 0
+    while paths_length[smallest_index] == 0:
+        smallest_index +=1
+        
+    return paths_length[smallest_index]+1
+
+ 

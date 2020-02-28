@@ -1,0 +1,31 @@
+def solution(l):
+    
+    list_of_divides = []
+    count = 0   # number of lucky triples
+    divisible = []
+  
+    # creating a 2D list based on the list given
+    # In the new list, the ith element is the list of numbers (represented by their indices instead of actual value) 
+    # that the ith number in the initial list divides (not including the number itself).
+    for i in range(len(l)-1):
+        divisible = []
+        for j in range(i+1,len(l)):
+            if l[j]%l[i] == 0:
+                divisible.append(j)
+        
+        else:
+            list_of_divides.append(divisible)
+
+    list_of_divides.append([])
+    
+    
+    # in the tuple(li, lj, lk): 
+    # i is the indicies of the 2D list. 
+    # j is all the elements in the ith list. 
+    # k is all the elements in the jth list. 
+    # now we go through the lists to add all the possible combinations
+    for element in range(len(list_of_divides)):
+        for i in range(len(list_of_divides[element])): 
+            count += len(list_of_divides[list_of_divides[element][i]])
+           
+    return count

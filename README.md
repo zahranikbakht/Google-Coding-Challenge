@@ -1,2 +1,3 @@
 # Google-Coding-Challenge
-Google-Coding-Challenge 2020
+
+The secret Google coding challenge called Foobar (2020 version)
